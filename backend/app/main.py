@@ -107,6 +107,28 @@ def refresh_realtime_threat_feeds():
         )
 
 
+@app.post("/api/v1/extension/launch", tags=["Extension Integration"])
+def launch_extension_in_browser():
+    """Launches the user's browser with the NEXORA extension loaded automatically."""
+    import subprocess
+    ext_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../extension"))
+    dash_url = "http://127.0.0.1:8000/dashboard/"
+    
+    try:
+        # Try Chrome
+        cmd = f'start "" chrome.exe --load-extension="{ext_path}" "{dash_url}"'
+        subprocess.Popen(cmd, shell=True)
+        return {"status": "success", "message": "Browser launched with NEXORA extension loaded automatically."}
+    except Exception as e:
+        try:
+            # Fallback to Edge
+            cmd = f'start "" msedge.exe --load-extension="{ext_path}" "{dash_url}"'
+            subprocess.Popen(cmd, shell=True)
+            return {"status": "success", "message": "Edge launched with NEXORA extension loaded."}
+        except Exception as err:
+            return {"status": "error", "message": f"Could not launch browser automatically: {err}"}
+
+
 @app.get("/api/v1/stats", response_model=StatsResponse, tags=["Telemetry"])
 def get_scan_statistics():
     """Returns aggregated real-time scan volume, threat detection ratio, and average risk score."""

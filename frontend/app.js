@@ -50,6 +50,29 @@ function triggerPwaInstall() {
     }
 }
 
+function triggerOneClickBrowserLaunch() {
+    const btn = document.getElementById("oneClickLaunchBtn");
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<span>⏳ Launching Browser with Shield...</span>`;
+    btn.disabled = true;
+
+    fetch(`${API_BASE}/api/v1/extension/launch`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+            btn.innerHTML = `<span>✅ Launched Successfully!</span>`;
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                closeExtensionModal();
+            }, 2000);
+        })
+        .catch(err => {
+            alert("Could not launch browser automatically: " + err.message + "\nYou can run create_desktop_shortcut.bat or load extension folder manually.");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+}
+
 // Extension Modal Handlers
 function openExtensionModal() {
     const modal = document.getElementById("extensionModal");

@@ -1024,6 +1024,49 @@ input[type="text"]:focus, textarea:focus {
     display: block;
 }
 
+.ext-quick-action-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(168, 85, 247, 0.1));
+    border: 1px solid var(--neon-cyan);
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+.large-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.quick-sub {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.ext-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1.25rem 0;
+    position: relative;
+}
+
+.ext-divider span {
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    background: var(--bg-panel);
+    padding: 0 10px;
+    letter-spacing: 0.5px;
+}
+
 .ext-banner-info {
     padding: 10px 14px;
     border-radius: 8px;
