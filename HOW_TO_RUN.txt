@@ -1,0 +1,308 @@
+================================================================================
+          NEXORA PhishGuard — Master Project Guide & Architectural Blueprint
+================================================================================
+     Autonomous AI/ML Phishing Detection & Real-Time Prevention Platform
+    Engineered & Researched by Team NEXORA // B.Tech CSE Cybersecurity Lab
+================================================================================
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+1.  Platform Overview
+2.  Complete System Architecture
+3.  The 22 Extracted Feature Dimensions (Deep Security Explanations)
+4.  Email Social Engineering Detection Heuristics
+5.  Machine Learning Methodology & Benchmarks
+6.  Security Risk Engine & Policy Matrix
+7.  Complete Technology Stack Used
+8.  Quick Start Guide (1-Click & Manual)
+9.  Complete Command Reference by Lifecycle
+10. Real-Time Browser Extension Integration
+11. Telemetry & Audit Log Management
+12. Academic Viva Defense & Research FAQ
+
+================================================================================
+1. PLATFORM OVERVIEW
+================================================================================
+NEXORA PhishGuard is a defense-in-depth cybersecurity platform that combines
+supervised machine learning, information theory (Shannon Entropy), lexical
+heuristics, and real-time browser extension monitoring to detect and neutralize
+zero-hour phishing attacks before credentials can be stolen.
+
+Key Capabilities:
+- Zero-Hour Detection: Does not rely purely on stale static blacklists; generalizes
+  to detect novel attack patterns using trained ensemble models.
+- Air-Gapped Static Analysis: Extracts 22 mathematical and structural features
+  without initiating dangerous server-side network requests (prevents Server-Side
+  Request Forgery - SSRF).
+- Explainable AI (XAI): Demystifies model predictions by generating plain-English,
+  prioritized security reasons with severity ratings (critical, warning, info).
+- Decoupled Risk Scoring: Combines ML probabilities with heuristic red flags to
+  output a calibrated 0–100 Risk Score and enforce policy actions (ALLOW, WARN,
+  STRONG_WARNING, BLOCK).
+- Real-Time Browser Extension: A Manifest V3 background service worker actively
+  intercepts active tabs and displays on-page warning banners on deceptive domains.
+- Real-Time Threat Intelligence Pipeline: Ingests live threat feeds from OpenPhish
+  and verified domain feeds with on-demand automated retraining.
+
+================================================================================
+2. COMPLETE SYSTEM ARCHITECTURE
+================================================================================
+
+                    +--------------------------------------------------+
+                    |               CLIENT SURFACES                    |
+                    |  +-------------------------+  +---------------+  |
+                    |  | Cybersecurity Dashboard |  | Chrome / Edge |  |
+                    |  | (Dark/Light Cyber UI)   |  | Extension(V3) |  |
+                    |  +------------+------------+  +-------+-------+  |
+                    +---------------+-----------------------+----------+
+                                    | HTTP REST (JSON)      |
+                                    v                       v
+                    +--------------------------------------------------+
+                    |            FASTAPI BACKEND ENGINE                |
+                    |   (Pydantic v2 Validation, CORS, Telemetry)      |
+                    +---------------+-----------------------+----------+
+                                    |                       |
+             +----------------------+-------+       +-------+----------------------+
+             v                              v       v                              v
+    +-----------------+             +---------------+                    +-----------------+
+    │   URL Feature   │             │   Email NLP   │                    │ OpenPhish Live  │
+    │    Extractor    │             │ Social Engine │                    │ Ingestion Feed  │
+    │ (22 Dimensions) │             │ (Urgency/Auth)│                    │  (Auto-Retrain) │
+    +--------+--------+             +-------+-------+                    +--------+--------+
+             |                              |                                     |
+             v                              v                                     v
+    +-----------------------------------------------+                    +-----------------+
+    │             ML MODEL REGISTRY                 │                    │ Train/Test Split│
+    │  [CHAMPION]: Random Forest (100 Trees)        │<-------------------| & Stratification│
+    │  Benchmarked: GradientBoost, DT, LogisticReg  │                    +-----------------+
+    +-----------------------+-----------------------+
+                            | Class Probability: P(phishing|x)
+                            v
+    +-----------------------------------------------+
+    │     EXPLAINABILITY (XAI) & RISK ENGINE        │
+    │  - Hard Red-Flag Modifiers (+35 IP, +35 @)    │
+    │  - Calibrated 0–100 Risk Score                │
+    │  - Enforced Policy: ALLOW | WARN | BLOCK      │
+    +-----------------------+-----------------------+
+                            |
+                            v
+    +-----------------------------------------------+
+    │         PERSISTENT AUDIT STORAGE              │
+    │             (SQLite: scans.db)                │
+    +-----------------------------------------------+
+
+================================================================================
+3. THE 22 EXTRACTED FEATURE DIMENSIONS (DEEP DIVE)
+================================================================================
+Every target URL is parsed into a 22-dimensional numerical vector in < 1 ms:
+
+#   Feature Name               Category         Attack Vector Rationale
+--------------------------------------------------------------------------------
+1   url_length                 Length           Very long URLs (>75 chars) push malicious domains out of view on mobile address bars.
+2   hostname_length            Length           Contains nested domain mimicry (e.g. chase.com.account-update.xyz).
+3   path_length                Length           Complex path trees hide obfuscated redirect scripts and phishing kits.
+4   query_length               Length           Encodes stolen session parameters, Base64 victim hashes, or redirects.
+5   num_dots                   Structural       Deep subdomain chains (e.g. paypal.com.verify.identity.evil.com).
+6   num_hyphens                Structural       Mimics legitimate brands (e.g. pay-pal-secure-login.com).
+7   num_underscores            Structural       Used in dynamic session tokens to evade simple keyword filters.
+8   num_slashes                Structural       Excess directory slashes indicate deep file nesting on hacked hosts.
+9   num_questionmarks          Structural       Multiple question marks indicate URL obfuscation.
+10  num_equal_signs            Structural       Multiple parameters indicate credential harvesting forms passing victim data.
+11  num_at_symbols             Deception        CRITICAL: Browsers ignore everything before '@' (e.g. paypal.com@evil.com goes to evil.com).
+12  num_percent_signs          Obfuscation      URL-encoding (%20, %2F) hides malicious keywords from naive filters.
+13  num_ampersands             Structural       Parameter chaining in phishing session tracking scripts.
+14  num_digits                 Obfuscation      Random numerical tokens create one-time disposable landing pages.
+15  digit_ratio                Statistical      Elevated digit concentration (>15%) is characteristic of DGAs.
+16  num_subdomains             DNS/Hierarchy    Isolates true registered domain vs abusive subdomain prefixes (depth >= 3).
+17  has_ip_address             Structural       HARD RED FLAG: Legitimate sites never host customer logins on raw IPs (e.g. http://192.168.1.1/login).
+18  is_https                   Cryptographic    Unencrypted HTTP forms for authentication remain inherently dangerous.
+19  has_double_slash_redirect  Structural       '//' past index 7 triggers open-redirect vulnerabilities.
+20  keyword_count              Heuristic        Checks for targeted terms: login, verify, account, banking, update, security, wallet.
+21  url_entropy                Info Theory      Shannon Entropy: -sum(p * log2(p)). Measures URL randomness; detects DGAs.
+22  hostname_entropy           Info Theory      Shannon Entropy on hostname. Detects machine-generated disposable domains.
+
+================================================================================
+4. EMAIL SOCIAL ENGINEERING DETECTION HEURISTICS
+================================================================================
+The Email Phishing Analyzer (src/email_analyzer.py) operates across 4 layers:
+
+1. Brand Impersonation & Display Name Spoofing:
+   Cross-checks sender display names against verified domain whitelists for 17+
+   targeted institutions (PayPal, Microsoft, Apple, Chase, Google, Binance, DHL, etc.).
+   Example: From: "PayPal Security" <alert@fake-verify.xyz> -> FLAG: BRAND SPOOFING.
+
+2. Reply-To Address Redirection:
+   Detects return-path manipulation where replies are silently rerouted to an attacker's drop box.
+   Example: From: support@company.com, Reply-To: attacker-drop@tempmail.cc.
+
+3. Psychological Urgency & Coercion Regex:
+   Identifies social engineering triggers designed to induce panic:
+   "within 24 hours", "account suspended", "unauthorized login", "tax refund", "wire transfer".
+
+4. Embedded Hyperlink Extraction:
+   Parses all URLs in the email body and runs each through the full 22-feature ML Risk Engine.
+
+================================================================================
+5. MACHINE LEARNING METHODOLOGY & BENCHMARKS
+================================================================================
+Dataset: Real-time stream of verified active phishing URLs from OpenPhish Community Feed
+paired with top global legitimate domains.
+Split: 80% Training, 20% Testing using Stratified K-Fold splitting.
+
+MULTI-MODEL BENCHMARK COMPARISON:
+================================================================================
+Model Candidate       Accuracy   Precision (Phish)  Recall (Phish)  F1-Score  ROC-AUC  Status
+--------------------------------------------------------------------------------
+Random Forest         96.20%     95.00%             97.44%          0.9620    0.9974   [CHAMPION]
+Gradient Boosting     96.20%     95.00%             97.44%          0.9620    0.9968   Runner-up
+Decision Tree         96.20%     95.00%             97.44%          0.9620    0.9503   High Variance
+Logistic Regression   94.94%     92.68%             97.44%          0.9500    0.9923   Baseline
+================================================================================
+
+Why Random Forest is the Champion:
+- Low Variance: Averages predictions across 100 decorrelated trees, preventing overfitting.
+- Superior ROC-AUC (0.9974): Near-perfect class separability across all probabilistic thresholds.
+- High Recall (97.44%): Minimizes False Negatives (the most critical failure mode in cybersecurity).
+
+================================================================================
+6. SECURITY RISK ENGINE & POLICY MATRIX
+================================================================================
+Final Risk Score = min(100, max(0, (ML_Probability * 100 * 0.6) + (Heuristic_Modifiers * 0.4)))
+
+POLICY ENFORCEMENT TIERS:
+--------------------------------------------------------------------------------
+Risk Score    Tier       Enforced Action   Description
+--------------------------------------------------------------------------------
+0  - 29       LOW        ALLOW             Safe to access. URL exhibits standard lexical structure.
+30 - 59       MEDIUM     WARN              Exercise caution. Suspicious structural/lexical anomalies.
+60 - 79       HIGH       STRONG_WARNING    High risk of phishing. Do not submit passwords or MFA tokens.
+80 - 100      CRITICAL   BLOCK             Critical threat detected. Connection should be blocked.
+--------------------------------------------------------------------------------
+
+================================================================================
+7. COMPLETE TECHNOLOGY STACK USED
+================================================================================
+- Core Language: Python 3.10+ / 3.12
+- ML & Data Science: Scikit-Learn (Random Forest, Gradient Boosting, Decision Tree, Logistic Regression)
+- Data Manipulation: Pandas & NumPy
+- Domain Parsing: Tldextract (Public Suffix List domain parsing)
+- Backend REST API: FastAPI (Asynchronous REST API with OpenAPI Swagger docs)
+- ASGI Web Server: Uvicorn (Port 8000)
+- Data Validation: Pydantic v2 (Strict request/response schema validation)
+- Audit Database: SQLite3 (Persistent scan telemetry in scans.db)
+- Model Serialization: Joblib (.joblib serialization)
+- Automated Testing: Pytest & HTTPX (20 unit and integration tests)
+- Frontend UI: HTML5, CSS3 (Glassmorphism, Dark/Light Themes), Vanilla JavaScript
+- Browser Extension: Chrome Manifest V3 (Background service worker + Content scripts)
+
+================================================================================
+8. QUICK START GUIDE (1-CLICK & MANUAL)
+================================================================================
+
+1-Click Launch on Windows:
+1. Copy project folder to computer.
+2. Double-click: run_project.bat
+
+Manual Step-by-Step Setup:
+1. Open Terminal in Project Root:
+   cd "e:/AL ML based phishing detection"
+
+2. Create and Activate Virtual Environment:
+   python -m venv venv
+   .\venv\Scripts\activate       # Windows
+   # source venv/bin/activate    # Mac/Linux
+
+3. Install Dependencies:
+   pip install -r requirements.txt
+
+4. Start the AI Server:
+   uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+
+================================================================================
+9. COMPLETE COMMAND REFERENCE BY LIFECYCLE
+================================================================================
+
+A. Environment & Package Management:
+   Activate venv (Windows)  : .\venv\Scripts\activate
+   Activate venv (Mac/Linux): source venv/bin/activate
+   Install dependencies     : pip install -r requirements.txt
+
+B. Live Threat Feed Ingestion & Retraining:
+   python ml/datasets/fetch_realtime_data.py
+
+C. Manual Model Benchmarking:
+   python ml/training/train_models.py
+
+D. Automated Pytest Test Suite:
+   pytest tests/
+   pytest -v tests/
+
+E. Server & Dashboard URLs:
+   uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+   Dashboard URL : http://127.0.0.1:8000/dashboard/
+   API Docs URL  : http://127.0.0.1:8000/docs
+   Health Check  : http://127.0.0.1:8000/api/v1/health
+
+F. API Endpoint Testing via cURL:
+   Analyze URL:
+   curl -X POST "http://127.0.0.1:8000/api/v1/analyze/url" \
+     -H "Content-Type: application/json" \
+     -d "{\"url\": \"http://paypal.com@secure-verify-account.xyz/login.php\"}"
+
+   Analyze Email:
+   curl -X POST "http://127.0.0.1:8000/api/v1/analyze/email" \
+     -H "Content-Type: application/json" \
+     -d "{\"sender\": \"PayPal Support <security@fake-paypal.xyz>\", \"subject\": \"URGENT: Locked Account\", \"body\": \"Verify: http://paypal.com@secure.xyz\", \"reply_to\": \"attacker@drop.cc\"}"
+
+================================================================================
+10. REAL-TIME BROWSER EXTENSION INTEGRATION
+================================================================================
+Located in: extension/
+
+How to Install in Chrome / Edge:
+1. Navigate to chrome://extensions or edge://extensions
+2. Turn ON "Developer mode" toggle.
+3. Click "Load unpacked" and select:
+   E:\AL ML based phishing detection\extension
+
+================================================================================
+11. TELEMETRY & AUDIT LOG MANAGEMENT
+================================================================================
+All scans are permanently recorded in scans.db (SQLite).
+
+To Clear Logs:
+- Dashboard: Click "Clear Logs" on the Scan Telemetry Log tab.
+- Terminal : curl -X DELETE "http://127.0.0.1:8000/api/v1/history"
+
+================================================================================
+12. ACADEMIC VIVA DEFENSE & RESEARCH FAQ
+================================================================================
+
+Q1: What problem does this project solve?
+Answer: Traditional phishing detection relies on static URL blacklists, which fail
+against zero-hour phishing attacks, fast-flux DNS, and algorithmically generated
+domains (DGAs). NEXORA PhishGuard extracts 22 structural, lexical, and
+information-theory features to detect novel attacks mathematically before they
+appear on blacklists.
+
+Q2: Why is Recall prioritized over Accuracy?
+Answer: In cybersecurity detection, a False Negative (missing an actual phishing
+attack) leads to credential theft and financial compromise. A False Positive
+(wrongly warning on a safe site) is merely an inconvenience. Prioritizing Recall
+minimizes dangerous False Negatives.
+
+Q3: How does Shannon Entropy detect obfuscated phishing?
+Answer: Shannon Entropy (H = -sum(p * log2(p))) measures character randomness.
+Standard human-readable domains have low-to-medium entropy (~2.5–3.5), whereas
+automated DGA domains, base64-encoded strings, and randomized hex tokens exhibit
+high entropy (>4.5).
+
+Q4: How is Server-Side Request Forgery (SSRF) prevented?
+Answer: The static feature extraction engine operates purely on lexical string
+decomposition without resolving DNS queries or initiating live HTTP requests to
+untrusted targets.
+
+================================================================================
+                          PROJECT DEVELOPED BY TEAM NEXORA
+================================================================================
