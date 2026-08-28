@@ -1,6 +1,7 @@
-# AI/ML-Based Phishing Detection & Prevention Platform
+# NEXORA — AI/ML-Based Phishing Detection & Prevention Platform
 
-A modular, explainable, and multi-layered cybersecurity defense system designed to detect, analyze, and mitigate malicious URLs and social engineering attacks using machine learning and heuristic intelligence.
+**Engineered & Researched by Team NEXORA**  
+*A modular, explainable, and multi-layered cybersecurity defense system designed to detect, analyze, and mitigate malicious URLs and social engineering attacks using machine learning and heuristic intelligence.*
 
 ---
 

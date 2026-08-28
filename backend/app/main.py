@@ -37,8 +37,8 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger("phishing_api")
 
 app = FastAPI(
-    title="AI/ML Phishing Detection & Prevention API",
-    description="Enterprise-grade cybersecurity intelligence platform detecting phishing attacks using ML & heuristic engines.",
+    title="NEXORA — AI/ML Phishing Detection & Prevention Platform",
+    description="Enterprise-grade cybersecurity intelligence and autonomous threat mitigation platform engineered by Team NEXORA.",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
