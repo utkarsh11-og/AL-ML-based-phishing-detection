@@ -17,8 +17,20 @@
                     <p class="ext-sub">Real-Time Domain Inspector</p>
                 </div>
             </div>
-            <div class="ext-status" id="engineStatusDot" title="Engine Status">●</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <button id="settingsToggleBtn" style="background:none; border:none; color:var(--text-sub); cursor:pointer; font-size:14px;" title="Server Settings">⚙️</button>
+                <div class="ext-status" id="engineStatusDot" title="Engine Status">●</div>
+            </div>
         </header>
+
+        <!-- Settings Drawer (Hidden by default) -->
+        <div id="settingsDrawer" style="display:none; background:rgba(0,0,0,0.5); border:1px solid var(--border); border-radius:6px; padding:8px; margin-bottom:4px;">
+            <div style="font-size:10px; color:var(--text-sub); margin-bottom:4px; font-weight:600;">BACKEND API SERVER URL:</div>
+            <div style="display:flex; gap:6px;">
+                <input type="text" id="customApiUrlInput" placeholder="http://127.0.0.1:8000 or https://your-domain.com" style="flex:1; background:#040711; border:1px solid var(--border); color:#fff; font-size:11px; padding:4px 6px; border-radius:4px; font-family:monospace;">
+                <button id="saveApiUrlBtn" style="background:var(--cyan); color:#000; border:none; border-radius:4px; padding:4px 8px; font-size:10px; font-weight:700; cursor:pointer;">Save</button>
+            </div>
+        </div>
 
         <!-- Current Domain Target -->
         <div class="current-site-card">

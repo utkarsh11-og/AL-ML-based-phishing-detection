@@ -1,12 +1,11 @@
-/**
- * NEXORA PhishGuard Background Service Worker (Manifest V3)
- * Monitors active tab navigation in real-time and updates extension badge indicators.
- */
+let API_BASE = "http://127.0.0.1:8000";
 
-const API_BASE = "http://127.0.0.1:8000";
-
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete" && tab.url && tab.url.startsWith("http")) {
+        if (chrome && chrome.storage && chrome.storage.local) {
+            const stored = await chrome.storage.local.get(["nexora_server_url"]);
+            if (stored.nexora_server_url) API_BASE = stored.nexora_server_url;
+        }
         checkUrlSafety(tabId, tab.url);
     }
 });

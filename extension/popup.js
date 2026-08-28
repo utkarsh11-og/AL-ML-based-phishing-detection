@@ -1,11 +1,37 @@
-/**
- * NEXORA PhishGuard Extension Popup Controller
- */
+let API_BASE = "http://127.0.0.1:8000";
 
-const API_BASE = "http://127.0.0.1:8000";
+document.addEventListener("DOMContentLoaded", async () => {
+    // Load saved server URL
+    if (chrome && chrome.storage && chrome.storage.local) {
+        const stored = await chrome.storage.local.get(["nexora_server_url"]);
+        if (stored.nexora_server_url) {
+            API_BASE = stored.nexora_server_url;
+        }
+    }
+    
+    const input = document.getElementById("customApiUrlInput");
+    if (input) input.value = API_BASE;
 
-document.addEventListener("DOMContentLoaded", () => {
     scanActiveTab();
+
+    // Toggle settings drawer
+    document.getElementById("settingsToggleBtn").addEventListener("click", () => {
+        const drawer = document.getElementById("settingsDrawer");
+        drawer.style.display = drawer.style.display === "none" ? "block" : "none";
+    });
+
+    // Save server URL
+    document.getElementById("saveApiUrlBtn").addEventListener("click", async () => {
+        const newUrl = document.getElementById("customApiUrlInput").value.trim().replace(/\/+$/, "");
+        if (newUrl) {
+            API_BASE = newUrl;
+            if (chrome && chrome.storage && chrome.storage.local) {
+                await chrome.storage.local.set({ nexora_server_url: newUrl });
+            }
+            document.getElementById("settingsDrawer").style.display = "none";
+            scanActiveTab();
+        }
+    });
 
     document.getElementById("reScanBtn").addEventListener("click", scanActiveTab);
     document.getElementById("openDashBtn").addEventListener("click", () => {
