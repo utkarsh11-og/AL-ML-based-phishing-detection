@@ -1,0 +1,5 @@
+,accuracy,precision,recall,f1_score,roc_auc,confusion_matrix
+Decision Tree,0.962,0.95,0.9744,0.962,0.9503,"[[38, 2], [1, 38]]"
+Random Forest,0.962,0.95,0.9744,0.962,0.9974,"[[38, 2], [1, 38]]"
+Gradient Boosting,0.962,0.95,0.9744,0.962,0.9968,"[[38, 2], [1, 38]]"
+Logistic Regression,0.9494,0.9268,0.9744,0.95,0.9923,"[[37, 3], [1, 38]]"

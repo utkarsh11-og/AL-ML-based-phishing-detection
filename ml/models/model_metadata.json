@@ -1,0 +1,140 @@
+{
+  "champion_model": "Random Forest",
+  "version": "1.0.0",
+  "feature_names": [
+    "url_length",
+    "hostname_length",
+    "path_length",
+    "query_length",
+    "num_dots",
+    "num_hyphens",
+    "num_underscores",
+    "num_slashes",
+    "num_questionmarks",
+    "num_equal_signs",
+    "num_at_symbols",
+    "num_percent_signs",
+    "num_ampersands",
+    "num_digits",
+    "digit_ratio",
+    "num_subdomains",
+    "has_ip_address",
+    "is_https",
+    "has_double_slash_redirect",
+    "keyword_count",
+    "url_entropy",
+    "hostname_entropy"
+  ],
+  "feature_count": 22,
+  "test_metrics": {
+    "accuracy": 0.962,
+    "precision": 0.95,
+    "recall": 0.9744,
+    "f1_score": 0.962,
+    "roc_auc": 0.9974,
+    "confusion_matrix": [
+      [
+        38,
+        2
+      ],
+      [
+        1,
+        38
+      ]
+    ]
+  },
+  "all_model_results": {
+    "Logistic Regression": {
+      "accuracy": 0.9494,
+      "precision": 0.9268,
+      "recall": 0.9744,
+      "f1_score": 0.95,
+      "roc_auc": 0.9923,
+      "confusion_matrix": [
+        [
+          37,
+          3
+        ],
+        [
+          1,
+          38
+        ]
+      ]
+    },
+    "Decision Tree": {
+      "accuracy": 0.962,
+      "precision": 0.95,
+      "recall": 0.9744,
+      "f1_score": 0.962,
+      "roc_auc": 0.9503,
+      "confusion_matrix": [
+        [
+          38,
+          2
+        ],
+        [
+          1,
+          38
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 0.962,
+      "precision": 0.95,
+      "recall": 0.9744,
+      "f1_score": 0.962,
+      "roc_auc": 0.9974,
+      "confusion_matrix": [
+        [
+          38,
+          2
+        ],
+        [
+          1,
+          38
+        ]
+      ]
+    },
+    "Gradient Boosting": {
+      "accuracy": 0.962,
+      "precision": 0.95,
+      "recall": 0.9744,
+      "f1_score": 0.962,
+      "roc_auc": 0.9968,
+      "confusion_matrix": [
+        [
+          38,
+          2
+        ],
+        [
+          1,
+          38
+        ]
+      ]
+    }
+  },
+  "feature_importances": {
+    "path_length": 0.2625,
+    "hostname_length": 0.2513,
+    "hostname_entropy": 0.1109,
+    "num_slashes": 0.0728,
+    "is_https": 0.0724,
+    "num_hyphens": 0.0507,
+    "num_digits": 0.0345,
+    "digit_ratio": 0.0328,
+    "url_length": 0.0308,
+    "num_dots": 0.0234,
+    "url_entropy": 0.0208,
+    "num_subdomains": 0.0181,
+    "keyword_count": 0.0075,
+    "num_ampersands": 0.0047,
+    "num_equal_signs": 0.003,
+    "query_length": 0.0025,
+    "num_questionmarks": 0.0014,
+    "num_underscores": 0.0,
+    "num_at_symbols": 0.0,
+    "num_percent_signs": 0.0,
+    "has_ip_address": 0.0,
+    "has_double_slash_redirect": 0.0
+  }
+}

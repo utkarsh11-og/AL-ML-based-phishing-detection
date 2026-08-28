@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBERDEFENSE // AI-Powered Phishing Detection & Prevention Platform</title>
+    <meta name="description" content="Enterprise-grade AI/ML cybersecurity platform for real-time URL and email phishing threat analysis and prevention.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Glow Canvas & Grid -->
+    <div class="cyber-grid"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="nav-brand">
+            <div class="logo-shield">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4" stroke-dasharray="10"/>
+                </svg>
+            </div>
+            <div>
+                <h1 class="brand-title">AegisGuard <span class="badge-ai">AI/ML Core</span></h1>
+                <p class="brand-subtitle">Autonomous Phishing Detection & Risk Prevention Platform</p>
+            </div>
+        </div>
+
+        <div class="system-status-pill" id="systemStatusPill">
+            <span class="status-dot pulse"></span>
+            <span id="systemStatusText">Connecting to ML Engine...</span>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="dashboard-container">
+        
+        <!-- Navigation Tabs -->
+        <nav class="cyber-tabs" role="tablist">
+            <button class="tab-btn active" id="tabUrlBtn" onclick="switchTab('url')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span>URL Threat Scanner</span>
+            </button>
+            <button class="tab-btn" id="tabEmailBtn" onclick="switchTab('email')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>Email Social Engineering</span>
+            </button>
+            <button class="tab-btn" id="tabModelBtn" onclick="switchTab('model')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                <span>Model Intelligence & XAI</span>
+            </button>
+            <button class="tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/></svg>
+                <span>Scan Telemetry Log</span>
+            </button>
+        </nav>
+
+        <!-- ==================== TAB 1: URL SCANNER ==================== -->
+        <section id="urlTab" class="tab-content active">
+            <div class="scanner-card glass-panel">
+                <div class="card-header">
+                    <h2>Real-Time URL Static & Heuristic Analysis</h2>
+                    <span class="card-hint">Air-Gapped SSRF-Safe Static Inspection</span>
+                </div>
+
+                <form id="urlScanForm" onsubmit="handleUrlSubmit(event)">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="urlInput" 
+                            placeholder="Enter untrusted target URL (e.g. http://paypal.com@secure-verify.xyz/login.php)..." 
+                            required
+                            autocomplete="off"
+                        >
+                        <button type="submit" id="urlScanBtn" class="cyber-btn primary">
+                            <span class="btn-text">INSPECT THREAT</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Quick Samples Bar -->
+                <div class="quick-samples">
+                    <span class="samples-label">Quick Test Vectors:</span>
+                    <button class="chip phish" onclick="loadSampleUrl('http://paypal.com@secure-verify-account.xyz/login.php')">⚠️ @ Redirection</button>
+                    <button class="chip phish" onclick="loadSampleUrl('http://192.168.1.100/secure/bankofamerica/verify.html')">⚠️ Raw IP Host</button>
+                    <button class="chip phish" onclick="loadSampleUrl('http://amaz0n-security-alert-center.top/orders/reverify')">⚠️ Typosquatting</button>
+                    <button class="chip legit" onclick="loadSampleUrl('https://www.github.com/torvalds/linux')">✅ Safe GitHub</button>
+                    <button class="chip legit" onclick="loadSampleUrl('https://en.wikipedia.org/wiki/Machine_learning')">✅ Safe Wiki</button>
+                </div>
+            </div>
+
+            <!-- URL Result Section (Hidden until scan) -->
+            <div id="urlResultSection" class="results-grid hidden">
+                
+                <!-- Left: Gauge & Prevention Action -->
+                <div class="result-card glass-panel score-card">
+                    <h3>Risk Assessment</h3>
+                    
+                    <div class="gauge-wrapper">
+                        <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <circle class="gauge-bg" cx="100" cy="100" r="80"></circle>
+                            <circle class="gauge-bar" id="urlGaugeBar" cx="100" cy="100" r="80" stroke-dasharray="502.65" stroke-dashoffset="502.65"></circle>
+                        </svg>
+                        <div class="gauge-center">
+                            <span class="gauge-value" id="urlScoreVal">0</span>
+                            <span class="gauge-max">/ 100</span>
+                            <span class="gauge-level" id="urlLevelBadge">ANALYZING</span>
+                        </div>
+                    </div>
+
+                    <div class="policy-action-box" id="urlPolicyBox">
+                        <div class="action-title" id="urlActionText">ACTION: PENDING</div>
+                        <p class="action-desc" id="urlActionDesc">Evaluating threat level...</p>
+                    </div>
+
+                    <div class="meta-row">
+                        <div class="meta-item">
+                            <span class="meta-label">ML Confidence</span>
+                            <span class="meta-val" id="urlConfidenceVal">--%</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Engine Model</span>
+                            <span class="meta-val" id="urlModelVal">Random Forest</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Explainability & Indicators -->
+                <div class="result-card glass-panel reasons-card">
+                    <div class="card-header">
+                        <h3>Explainable AI (XAI) Indicators</h3>
+                        <span class="badge-tag">Threat Signals</span>
+                    </div>
+
+                    <div class="reasons-list" id="urlReasonsList">
+                        <!-- Injected via JavaScript -->
+                    </div>
+
+                    <div class="features-collapsible">
+                        <button class="collapse-toggle" onclick="toggleFeatureTable()">
+                            <span>Extracted Numeric Feature Matrix (22 Vector Dimensions)</span>
+                            <span id="collapseIcon">▼</span>
+                        </button>
+                        <div id="featureTableContainer" class="feature-table-wrapper hidden">
+                            <table class="cyber-table" id="urlFeatureTable">
+                                <thead>
+                                    <tr>
+                                        <th>Feature Name</th>
+                                        <th>Extracted Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: EMAIL SCANNER ==================== -->
+        <section id="emailTab" class="tab-content">
+            <div class="scanner-card glass-panel">
+                <div class="card-header">
+                    <h2>Social Engineering & Phishing Email Inspector</h2>
+                    <span class="card-hint">Analyzes sender authentication, urgency heuristics, and embedded hyperlinks</span>
+                </div>
+
+                <form id="emailScanForm" onsubmit="handleEmailSubmit(event)">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="emailSender">From (Sender Header):</label>
+                            <input type="text" id="emailSender" placeholder='e.g. "PayPal Security" &lt;alert@update-portal-paypal.xyz&gt;' required>
+                        </div>
+                        <div class="form-col">
+                            <label for="emailReplyTo">Reply-To (Optional):</label>
+                            <input type="text" id="emailReplyTo" placeholder='e.g. attacker-drop@tempmail.cc'>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailSubject">Subject Line:</label>
+                        <input type="text" id="emailSubject" placeholder="e.g. URGENT: Your Account Has Been Locked - Action Required Within 24h" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailBody">Email Body Text (Include embedded links):</label>
+                        <textarea id="emailBody" rows="5" placeholder="Paste full email body content here..." required></textarea>
+                    </div>
+
+                    <div class="btn-bar">
+                        <button type="button" class="cyber-btn secondary" onclick="loadSampleEmail()">Load Deceptive Sample Template</button>
+                        <button type="submit" id="emailScanBtn" class="cyber-btn primary">
+                            <span class="btn-text">ANALYZE EMAIL THREAT</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Email Result Section -->
+            <div id="emailResultSection" class="results-grid hidden">
+                <div class="result-card glass-panel score-card">
+                    <h3>Email Risk Verdict</h3>
+                    <div class="gauge-wrapper">
+                        <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <circle class="gauge-bg" cx="100" cy="100" r="80"></circle>
+                            <circle class="gauge-bar" id="emailGaugeBar" cx="100" cy="100" r="80" stroke-dasharray="502.65" stroke-dashoffset="502.65"></circle>
+                        </svg>
+                        <div class="gauge-center">
+                            <span class="gauge-value" id="emailScoreVal">0</span>
+                            <span class="gauge-max">/ 100</span>
+                            <span class="gauge-level" id="emailLevelBadge">ANALYZING</span>
+                        </div>
+                    </div>
+
+                    <div class="policy-action-box" id="emailPolicyBox">
+                        <div class="action-title" id="emailActionText">ACTION: PENDING</div>
+                        <p class="action-desc" id="emailActionDesc">Evaluating threat level...</p>
+                    </div>
+                </div>
+
+                <div class="result-card glass-panel reasons-card">
+                    <h3>Social Engineering Indicators</h3>
+                    <div class="reasons-list" id="emailSignalsList"></div>
+
+                    <div class="embedded-urls-section">
+                        <h4>Embedded Hyperlinks Found (<span id="emailUrlCount">0</span>)</h4>
+                        <div id="emailUrlsList" class="embedded-url-cards"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: MODEL INTELLIGENCE ==================== -->
+        <section id="modelTab" class="tab-content">
+            <div class="grid-2col">
+                <!-- Champion Model Stats -->
+                <div class="glass-panel info-box">
+                    <h3>Champion Classifier Specifications</h3>
+                    <div class="metrics-grid" id="championMetricsGrid">
+                        <div class="metric-card">
+                            <span class="metric-num" id="metricAccuracy">--%</span>
+                            <span class="metric-title">Test Accuracy</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-num" id="metricPrecision">--%</span>
+                            <span class="metric-title">Precision (Phish)</span>
+                        </div>
+                        <div class="metric-card highlight">
+                            <span class="metric-num" id="metricRecall">--%</span>
+                            <span class="metric-title">Recall (Low FN)</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-num" id="metricF1">--%</span>
+                            <span class="metric-title">F1-Score</span>
+                        </div>
+                    </div>
+
+                    <h4 class="subhead">Model Comparison Benchmark Table</h4>
+                    <div class="table-responsive">
+                        <table class="cyber-table" id="comparisonTable">
+                            <thead>
+                                <tr>
+                                    <th>Model Name</th>
+                                    <th>Accuracy</th>
+                                    <th>Precision</th>
+                                    <th>Recall</th>
+                                    <th>F1-Score</th>
+                                    <th>ROC-AUC</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Feature Importances -->
+                <div class="glass-panel info-box">
+                    <h3>Top Predictive Feature Importances</h3>
+                    <p class="section-desc">Gini importance contribution of top lexical & structural indicators.</p>
+                    <div id="featureImportanceBars" class="importance-bars-container">
+                        <!-- Bars injected dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: SCAN TELEMETRY ==================== -->
+        <section id="historyTab" class="tab-content">
+            <div class="glass-panel">
+                <div class="card-header">
+                    <h2>Live Telemetry & Scan Audit Log</h2>
+                    <button class="cyber-btn secondary small" onclick="fetchScanHistory()">Refresh Log</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="cyber-table" id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Scan ID</th>
+                                <th>Timestamp</th>
+                                <th>Type</th>
+                                <th>Target / Sender</th>
+                                <th>Risk Score</th>
+                                <th>Classification</th>
+                                <th>Enforced Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">No scans executed in current session.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>CYBERSECURITY THREAT INTELLIGENCE & ACADEMIC RESEARCH LAB // DEFENSIVE USE ONLY</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
