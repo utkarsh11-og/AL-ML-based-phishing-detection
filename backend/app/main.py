@@ -141,6 +141,13 @@ def get_scan_history(limit: int = 50):
     return storage.get_recent_scans(limit=limit)
 
 
+@app.delete("/api/v1/history", tags=["Telemetry"])
+def clear_scan_history():
+    """Deletes all persistent telemetry audit records."""
+    storage.clear_all_scans()
+    return {"status": "success", "message": "All telemetry audit logs cleared."}
+
+
 @app.post("/api/v1/analyze/url", response_model=URLAnalysisResponse, tags=["Threat Analysis"])
 def analyze_url_endpoint(payload: URLAnalysisRequest):
     """

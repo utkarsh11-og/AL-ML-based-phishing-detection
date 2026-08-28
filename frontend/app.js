@@ -468,3 +468,16 @@ async function fetchScanHistory() {
         console.warn("Could not fetch scan history", e);
     }
 }
+
+// Clear Scan History
+async function clearScanHistory() {
+    if (!confirm("Are you sure you want to clear all telemetry audit logs?")) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/api/v1/history`, { method: "DELETE" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        fetchScanHistory();
+    } catch (err) {
+        alert("Could not clear audit logs: " + err.message);
+    }
+}

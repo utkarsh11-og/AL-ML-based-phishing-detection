@@ -133,3 +133,9 @@ class StorageManager:
                 "average_risk_score": round(float(avg_score), 2),
                 "recent_threats_count": recent_threats
             }
+
+    def clear_all_scans(self):
+        """Deletes all persistent audit scan records."""
+        with self._get_connection() as conn:
+            conn.execute("DELETE FROM scan_logs")
+            conn.commit()
