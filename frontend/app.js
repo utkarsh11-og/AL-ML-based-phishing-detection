@@ -11,10 +11,39 @@ const CIRCUMFERENCE = 2 * Math.PI * 80; // 502.65 for r=80
 
 // Initialize on DOM Ready
 document.addEventListener("DOMContentLoaded", () => {
+    initTheme();
     checkSystemHealth();
     loadModelIntelligence();
     fetchScanHistory();
 });
+
+// Theme Toggle (Dark & Light Mode)
+function initTheme() {
+    const savedTheme = localStorage.getItem("nexora_theme") || "dark";
+    applyTheme(savedTheme);
+}
+
+function toggleTheme() {
+    const isLight = document.body.classList.contains("light-theme");
+    const newTheme = isLight ? "dark" : "light";
+    applyTheme(newTheme);
+    localStorage.setItem("nexora_theme", newTheme);
+}
+
+function applyTheme(theme) {
+    const icon = document.getElementById("themeIcon");
+    const text = document.getElementById("themeText");
+
+    if (theme === "light") {
+        document.body.classList.add("light-theme");
+        if (icon) icon.innerText = "🌙";
+        if (text) text.innerText = "Dark";
+    } else {
+        document.body.classList.remove("light-theme");
+        if (icon) icon.innerText = "☀️";
+        if (text) text.innerText = "Light";
+    }
+}
 
 // Tab Switching
 function switchTab(tabName) {

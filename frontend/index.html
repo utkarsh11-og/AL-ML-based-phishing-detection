@@ -32,9 +32,16 @@
             </div>
         </div>
 
-        <div class="system-status-pill" id="systemStatusPill">
-            <span class="status-dot pulse"></span>
-            <span id="systemStatusText">Connecting to ML Engine...</span>
+        <div class="nav-controls">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+                <span class="theme-icon" id="themeIcon">☀️</span>
+                <span class="theme-text" id="themeText">Light</span>
+            </button>
+
+            <div class="system-status-pill" id="systemStatusPill">
+                <span class="status-dot pulse"></span>
+                <span id="systemStatusText">Connecting to ML Engine...</span>
+            </div>
         </div>
     </header>
 
