@@ -135,7 +135,8 @@ class StorageManager:
             }
 
     def clear_all_scans(self):
-        """Deletes all persistent audit scan records."""
+        """Permanently deletes all scan records and vacuums the database file."""
         with self._get_connection() as conn:
             conn.execute("DELETE FROM scan_logs")
             conn.commit()
+            conn.execute("VACUUM")
