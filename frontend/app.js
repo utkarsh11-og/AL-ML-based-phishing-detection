@@ -9,13 +9,82 @@ const API_BASE = window.location.origin.includes(":8000") || window.location.ori
 
 const CIRCUMFERENCE = 2 * Math.PI * 80; // 502.65 for r=80
 
+let deferredPrompt = null;
+
 // Initialize on DOM Ready
 document.addEventListener("DOMContentLoaded", () => {
     initTheme();
     checkSystemHealth();
     loadModelIntelligence();
     fetchScanHistory();
+    registerServiceWorker();
 });
+
+// PWA Service Worker & Install Prompt
+function registerServiceWorker() {
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/dashboard/sw.js").catch(err => {
+            console.log("SW register note:", err);
+        });
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const pwaBtn = document.getElementById("pwaInstallBtn");
+        if (pwaBtn) pwaBtn.classList.remove("hidden");
+    });
+}
+
+function triggerPwaInstall() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+                console.log("User accepted the PWA install");
+            }
+            deferredPrompt = null;
+        });
+    } else {
+        alert("To install as a Desktop App:\nClick the 'Install App' icon (computer/download symbol) located on the right side of your browser's address bar!");
+    }
+}
+
+// Extension Modal Handlers
+function openExtensionModal() {
+    const modal = document.getElementById("extensionModal");
+    if (modal) modal.classList.remove("hidden");
+}
+
+function closeExtensionModal() {
+    const modal = document.getElementById("extensionModal");
+    if (modal) modal.classList.add("hidden");
+}
+
+function handleModalBackdropClick(e) {
+    if (e.target.id === "extensionModal") {
+        closeExtensionModal();
+    }
+}
+
+function switchModalTab(type) {
+    document.getElementById("mTabExt").classList.toggle("active", type === "ext");
+    document.getElementById("mTabDesktop").classList.toggle("active", type === "desktop");
+    document.getElementById("modalContentExt").classList.toggle("active", type === "ext");
+    document.getElementById("modalContentDesktop").classList.toggle("active", type === "desktop");
+}
+
+function copyExtensionPath() {
+    const pathText = document.getElementById("extensionFolderPath").innerText;
+    navigator.clipboard.writeText(pathText).then(() => {
+        const copyBtn = document.querySelector(".copy-btn");
+        const original = copyBtn.innerText;
+        copyBtn.innerText = "Copied! ✅";
+        setTimeout(() => copyBtn.innerText = original, 2000);
+    }).catch(() => {
+        alert("Path: " + pathText);
+    });
+}
 
 // Theme Toggle (Dark & Light Mode)
 function initTheme() {

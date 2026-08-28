@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "NEXORA PhishGuard — Real-Time AI Domain Shield",
+  "version": "1.0.0",
+  "description": "Real-time AI/ML phishing domain monitoring and threat prevention shield by Team NEXORA.",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*",
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "NEXORA PhishGuard Shield"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

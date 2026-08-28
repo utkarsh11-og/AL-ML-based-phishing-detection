@@ -1,0 +1,16 @@
+{
+  "name": "NEXORA PhishGuard — AI Threat Platform",
+  "short_name": "NEXORA",
+  "description": "Autonomous AI/ML Phishing Detection & Risk Prevention Platform",
+  "start_url": "/dashboard/",
+  "display": "standalone",
+  "background_color": "#060913",
+  "theme_color": "#00f2fe",
+  "icons": [
+    {
+      "src": "/dashboard/logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

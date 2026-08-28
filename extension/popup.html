@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA PhishGuard</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="ext-container">
+        <!-- Header -->
+        <header class="ext-header">
+            <div class="ext-brand">
+                <div class="ext-logo">🛡️</div>
+                <div>
+                    <h2>NEXORA <span class="badge-mini">AI SHIELD</span></h2>
+                    <p class="ext-sub">Real-Time Domain Inspector</p>
+                </div>
+            </div>
+            <div class="ext-status" id="engineStatusDot" title="Engine Status">●</div>
+        </header>
+
+        <!-- Current Domain Target -->
+        <div class="current-site-card">
+            <span class="site-label">ACTIVE TAB TARGET:</span>
+            <div class="site-url" id="activeUrlText">Fetching active tab...</div>
+        </div>
+
+        <!-- Risk Gauge & Verdict -->
+        <div class="ext-verdict-card">
+            <div class="mini-gauge">
+                <span class="score-number" id="riskScoreNum">--</span>
+                <span class="score-scale">/100</span>
+            </div>
+            <div class="verdict-info">
+                <div class="verdict-badge" id="verdictBadge">SCANNING</div>
+                <div class="action-text" id="actionText">Evaluating domain signals...</div>
+            </div>
+        </div>
+
+        <!-- Threat Reasons / Signals -->
+        <div class="signals-box">
+            <div class="signals-title">Explainable Threat Indicators:</div>
+            <div class="signals-list" id="reasonsList">
+                <div class="signal-item info">Connecting to local AI engine...</div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="ext-footer">
+            <button class="ext-btn secondary" id="reScanBtn">↻ Re-Scan</button>
+            <button class="ext-btn primary" id="openDashBtn">Open Full Dashboard</button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

@@ -33,6 +33,10 @@
         </div>
 
         <div class="nav-controls">
+            <button class="cyber-btn primary small" onclick="openExtensionModal()" title="Real-Time Domain Protection Extension">
+                <span>⚡ Realtime Shield (Extension)</span>
+            </button>
+
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
                 <span class="theme-icon" id="themeIcon">☀️</span>
                 <span class="theme-text" id="themeText">Light</span>
@@ -334,6 +338,86 @@
         </section>
 
     </main>
+
+    <!-- Real-time Shield & Extension Modal -->
+    <div id="extensionModal" class="modal-overlay hidden" onclick="handleModalBackdropClick(event)">
+        <div class="modal-card glass-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title-box">
+                    <span class="modal-icon">🛡️</span>
+                    <div>
+                        <h3>NEXORA Real-Time Shield</h3>
+                        <p class="modal-subtitle">Browser Extension & Desktop App Integration</p>
+                    </div>
+                </div>
+                <button class="modal-close-btn" onclick="closeExtensionModal()">&times;</button>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" id="mTabExt" onclick="switchModalTab('ext')">🌐 Chrome / Edge Extension</button>
+                <button class="modal-tab-btn" id="mTabDesktop" onclick="switchModalTab('desktop')">💻 Desktop App & Shortcut</button>
+            </div>
+
+            <!-- Tab 1: Browser Extension Guide -->
+            <div id="modalContentExt" class="modal-tab-content active">
+                <div class="ext-banner-info">
+                    <p>The <strong>NEXORA Real-Time Domain Extension</strong> monitors every website you visit in the background, checks it with your local AI engine, and displays a warning banner if a domain is phishing.</p>
+                </div>
+
+                <div class="install-steps">
+                    <div class="step-card">
+                        <span class="step-num">1</span>
+                        <div class="step-details">
+                            <h4>Open Extensions Manager</h4>
+                            <p>In Chrome or Edge, open a new tab and navigate to: <code class="code-pill">chrome://extensions</code> (or <code class="code-pill">edge://extensions</code>)</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <span class="step-num">2</span>
+                        <div class="step-details">
+                            <h4>Enable Developer Mode</h4>
+                            <p>Toggle the <strong>Developer mode</strong> switch in the top-right corner of the Extensions page.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <span class="step-num">3</span>
+                        <div class="step-details">
+                            <h4>Load Unpacked Extension Folder</h4>
+                            <p>Click the <strong>"Load unpacked"</strong> button in top-left and select your project's extension folder:</p>
+                            <div class="folder-path-box">
+                                <code id="extensionFolderPath">e:\AL ML based phishing detection\extension</code>
+                                <button class="copy-btn" onclick="copyExtensionPath()">Copy Path</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ext-verify-note">
+                    ✅ <em>Once loaded, the <strong>NEXORA Shield</strong> icon will appear in your browser toolbar, protecting all browsing tabs in real time!</em>
+                </div>
+            </div>
+
+            <!-- Tab 2: Desktop App -->
+            <div id="modalContentDesktop" class="modal-tab-content">
+                <div class="ext-banner-info">
+                    <p>Run <strong>NEXORA PhishGuard</strong> as a standalone native Desktop App with dedicated windowing and instant shortcut access.</p>
+                </div>
+
+                <div class="desktop-install-box">
+                    <button class="cyber-btn primary" id="pwaInstallBtn" onclick="triggerPwaInstall()">
+                        <span>📥 Install NEXORA as Desktop Application</span>
+                    </button>
+                    <p class="desktop-hint">Or in Chrome/Edge, click the <strong>Install App</strong> icon in the address bar (top-right of URL bar).</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="cyber-btn secondary" onclick="closeExtensionModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
