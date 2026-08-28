@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             API_BASE = stored.nexora_server_url;
         }
     }
-    
+
     const input = document.getElementById("customApiUrlInput");
     if (input) input.value = API_BASE;
 
