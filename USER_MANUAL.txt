@@ -1,0 +1,206 @@
+================================================================================
+                    NEXORA PHISHGUARD — USER & DEVELOPER MANUAL
+          Autonomous AI/ML Phishing Detection & Prevention Platform
+================================================================================
+
+TABLE OF CONTENTS:
+--------------------------------------------------------------------------------
+1. System Requirements & Prerequisites
+2. Quick Start: 1-Click Automated Launcher (Windows)
+3. Step-by-Step Manual Execution Guide
+4. How to Use the Cybersecurity Dashboard
+5. How to Load and Use the Browser Extension (Chrome / Edge)
+6. Running the Automated Test Suite
+7. Troubleshooting & Common Issues (FAQ)
+8. Stopping the Server
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. SYSTEM REQUIREMENTS & PREREQUISITES
+--------------------------------------------------------------------------------
+- Operating System : Windows 10/11, macOS, or Linux
+- Python Version   : Python 3.10, 3.11, 3.12, or 3.13
+- Web Browser      : Google Chrome, Microsoft Edge, Brave, or Mozilla Firefox
+- Terminal         : PowerShell, Command Prompt (cmd.exe), or Bash
+
+
+--------------------------------------------------------------------------------
+2. QUICK START: 1-CLICK AUTOMATED LAUNCHER (WINDOWS)
+--------------------------------------------------------------------------------
+If you are on Windows and want to start everything automatically:
+
+1. Open the project root folder in File Explorer.
+2. Double-click the file:
+      run_project.bat
+
+What this script does automatically:
+- Checks for Python installation.
+- Creates and activates the virtual environment (venv).
+- Installs all required packages from requirements.txt.
+- Checks if the ML model is trained (trains automatically if missing).
+- Starts the FastAPI Uvicorn server on port 8000.
+- Automatically opens the Cyber Dashboard in your default browser.
+
+
+--------------------------------------------------------------------------------
+3. STEP-BY-STEP MANUAL EXECUTION GUIDE
+--------------------------------------------------------------------------------
+
+Follow these steps to run the platform manually from your terminal.
+
+STEP 3.1: Open Terminal in the Project Directory
+------------------------------------------------
+Open PowerShell or Command Prompt and navigate to the project directory:
+   cd "C:\Users\matrx\Downloads\AL ML based phishing detection\AL ML based phishing detection"
+
+STEP 3.2: Create and Activate the Virtual Environment
+------------------------------------------------------
+If creating a fresh virtual environment:
+   python -m venv venv
+
+Activate the virtual environment:
+- On Windows (PowerShell):
+   .\venv\Scripts\Activate.ps1
+
+   * Note: If PowerShell shows a script execution restriction, run:
+     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+     and then run .\venv\Scripts\Activate.ps1 again.
+
+- On Windows (Command Prompt / cmd.exe):
+   venv\Scripts\activate.bat
+
+- On Linux / macOS:
+   source venv/bin/activate
+
+(When activated, you will see '(venv)' at the beginning of your terminal prompt.)
+
+STEP 3.3: Install Required Dependencies
+----------------------------------------
+Make sure all required Python libraries are installed:
+   python -m pip install -r requirements.txt
+
+STEP 3.4: (Optional) Train and Benchmark ML Models
+---------------------------------------------------
+The champion model is pre-trained in 'ml/models/phishing_model_v1.joblib'.
+To retrain or benchmark all 4 classifiers (Random Forest, Gradient Boosting,
+Decision Tree, Logistic Regression) from scratch:
+   python ml/training/train_models.py
+
+STEP 3.5: Start the Backend AI Server
+--------------------------------------
+Launch the FastAPI server using Uvicorn:
+   python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+
+You will see:
+   INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+   INFO:     Loaded ML model: Random Forest v1.0.0
+   INFO:     Application startup complete.
+
+STEP 3.6: Access the Web Interfaces
+------------------------------------
+Open your web browser and navigate to:
+- Cyber Dashboard UI : http://127.0.0.1:8000/dashboard/
+- Interactive API Docs: http://127.0.0.1:8000/docs
+
+
+--------------------------------------------------------------------------------
+4. HOW TO USE THE CYBERSECURITY DASHBOARD
+--------------------------------------------------------------------------------
+Once http://127.0.0.1:8000/dashboard/ is loaded in your browser:
+
+1. TAB 1: URL Threat Scanner
+   - Enter any suspicious URL or click on the Quick Test Vectors 
+     (e.g., '@ Redirection', 'Raw IP Host', 'Typosquatting', 'Safe GitHub').
+   - Click "INSPECT THREAT".
+   - View the animated 0-100 Risk Score gauge, Policy Action (ALLOW, WARN, BLOCK),
+     ML confidence, and Explainable AI (XAI) breakdown of flagged indicators.
+
+2. TAB 2: Email Social Engineering
+   - Enter Sender address, Subject, and Email Body.
+   - Click "EVALUATE EMAIL THREAT".
+   - The engine checks for Display Name Spoofing, Reply-To redirection,
+     coercive urgency keywords, and scans all embedded hyperlinks.
+
+3. TAB 3: Model Intelligence & XAI
+   - View accuracy, recall, precision, and ROC-AUC benchmark comparison tables.
+   - Inspect Feature Importance charts (Shannon entropy, subdomain depth, etc.).
+   - Click "Fetch Live Feeds & Retrain" to pull real-time OpenPhish threat intelligence.
+
+4. TAB 4: Scan Telemetry Log
+   - View persistent real-time scan history stored in SQLite (scans.db).
+   - Click "Clear All Logs" to reset telemetry and trigger an atomic database VACUUM.
+
+5. Theme Switcher:
+   - Click the "☀️ Light" / "🌙 Dark" button in the top navbar to toggle themes.
+
+
+--------------------------------------------------------------------------------
+5. HOW TO LOAD AND USE THE BROWSER EXTENSION (CHROME / EDGE)
+--------------------------------------------------------------------------------
+The project includes a Manifest V3 browser extension for live URL protection.
+
+To install it into your browser:
+1. Open Google Chrome or Microsoft Edge.
+2. Go to the extensions management page:
+   - In Chrome: chrome://extensions
+   - In Edge  : edge://extensions
+3. Enable "Developer mode" (toggle switch in the top-right corner).
+4. Click "Load unpacked" (top-left button).
+5. Browse and select the 'extension' folder:
+   C:\Users\matrx\Downloads\AL ML based phishing detection\AL ML based phishing detection\extension
+6. The extension "NEXORA PhishGuard — Real-Time AI Domain Shield" is now active.
+7. Click the extension icon in your browser toolbar to check active tab status.
+   If you visit a dangerous phishing domain, an in-page cyber alert banner 
+   will automatically appear at the top of the webpage.
+
+
+--------------------------------------------------------------------------------
+6. RUNNING THE AUTOMATED TEST SUITE
+--------------------------------------------------------------------------------
+To run the automated unit and integration tests (20 tests covering API endpoints,
+features, models, email analyzer, and storage):
+
+In your activated terminal, run:
+   python -m pytest
+
+Expected output:
+   ====== 20 passed in X.XXs ======
+
+
+--------------------------------------------------------------------------------
+7. TROUBLESHOOTING & COMMON ISSUES (FAQ)
+--------------------------------------------------------------------------------
+
+Q1: "Fatal error in launcher: Unable to create process using '...'"
+A1: This happens when the folder was moved from another drive or path.
+    Fix: Always run via python module syntax:
+         python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+         python -m pytest
+
+Q2: "Port 8000 is already in use"
+A2: Another application is using port 8000. Start the server on a different port:
+         python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8080 --reload
+    Then access http://127.0.0.1:8080/dashboard/
+
+Q3: PowerShell says "File ... cannot be loaded because running scripts is disabled"
+A3: Run this command once in PowerShell:
+         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+    Then re-run:
+         .\venv\Scripts\Activate.ps1
+
+Q4: "ModuleNotFoundError: No module named '...'"
+A4: Ensure your virtual environment is active (shows '(venv)'), then reinstall dependencies:
+         python -m pip install -r requirements.txt
+
+
+--------------------------------------------------------------------------------
+8. STOPPING THE SERVER
+--------------------------------------------------------------------------------
+To safely stop the backend server:
+- Go to the terminal running Uvicorn and press:
+  Ctrl + C
+
+================================================================================
+                    END OF USER & DEVELOPER MANUAL
+================================================================================
