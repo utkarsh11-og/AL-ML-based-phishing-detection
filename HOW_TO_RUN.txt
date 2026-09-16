@@ -197,30 +197,7 @@ Risk Score    Tier       Enforced Action   Description
 - Browser Extension: Chrome Manifest V3 (Background service worker + Content scripts)
 
 ================================================================================
-8. QUICK START GUIDE (1-CLICK & MANUAL)
-================================================================================
-
-1-Click Launch on Windows:
-1. Copy project folder to computer.
-2. Double-click: run_project.bat
-
-Manual Step-by-Step Setup:
-1. Open Terminal in Project Root:
-   cd "e:/AL ML based phishing detection"
-
-2. Create and Activate Virtual Environment:
-   python -m venv venv
-   .\venv\Scripts\activate       # Windows
-   # source venv/bin/activate    # Mac/Linux
-
-3. Install Dependencies:
-   pip install -r requirements.txt
-
-4. Start the AI Server:
-   uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
-
-================================================================================
-9. COMPLETE COMMAND REFERENCE BY LIFECYCLE
+8. COMPLETE COMMAND REFERENCE BY LIFECYCLE
 ================================================================================
 
 A. Environment & Package Management:
@@ -256,7 +233,7 @@ F. API Endpoint Testing via cURL:
      -d "{\"sender\": \"PayPal Support <security@fake-paypal.xyz>\", \"subject\": \"URGENT: Locked Account\", \"body\": \"Verify: http://paypal.com@secure.xyz\", \"reply_to\": \"attacker@drop.cc\"}"
 
 ================================================================================
-10. REAL-TIME BROWSER EXTENSION INTEGRATION
+09. REAL-TIME BROWSER EXTENSION INTEGRATION
 ================================================================================
 Located in: extension/
 
@@ -267,7 +244,7 @@ How to Install in Chrome / Edge:
    E:\AL ML based phishing detection\extension
 
 ================================================================================
-11. TELEMETRY & AUDIT LOG MANAGEMENT
+10. TELEMETRY & AUDIT LOG MANAGEMENT
 ================================================================================
 All scans are permanently recorded in scans.db (SQLite).
 
@@ -276,7 +253,7 @@ To Clear Logs:
 - Terminal : curl -X DELETE "http://127.0.0.1:8000/api/v1/history"
 
 ================================================================================
-12. ACADEMIC VIVA DEFENSE & RESEARCH FAQ
+11. ACADEMIC VIVA DEFENSE & RESEARCH FAQ
 ================================================================================
 
 Q1: What problem does this project solve?
